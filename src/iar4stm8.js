@@ -58,7 +58,7 @@ class Iar {
         var defs;
         var tmpfile = os.tmpdir() + "\\" + path.basename(args[2].replace("\"", ""));
         args.push(tmpfile);
-        var spw = ch.spawnSync(this.path + "arm\\bin\\iccarm.exe", args);
+        var spw = ch.spawnSync(this.path + "stm8\\bin\\iccstm8.exe", args);
         var temp;
         var inc_regex = new RegExp("^(\\$\\$TOOL_BEGIN\\s\\$\\$VERSION\\s\".*\"\\s\\$\\$INC_BEGIN\\s\\$\\$FILEPATH\\s\")(.*?)(\"\\s\\$\\$TOOL_END\\s)$", "gm");
         var buf = spw.output.toString();
@@ -69,27 +69,22 @@ class Iar {
         if (fs.existsSync(tmpfile)) {
 
             def.push("_Pragma(x) =");
-            def.push("__nounwind =");
-            def.push("__absolute =");
-            def.push("__arm =");
-            def.push("__big_endian =");
-            def.push("__fiq =");
-            def.push("__interwork =");
+            def.push("__eeprom =");
+            def.push("__far =");
+            def.push("__far_func =");
+            def.push("__huge =");
+            def.push("__huge_func =");
+            def.push("__interrupt =");
             def.push("__intrinsic =");
-            def.push("__irq =");
-            def.push("__little_endian =");
-            def.push("__nested =");
+            def.push("__monitor =");
+            def.push("__near =");
+            def.push("__near_func =");
             def.push("__no_init =");
             def.push("__noreturn =");
-            def.push("__packed =");
-            def.push("__pcrel =");
             def.push("__ramfunc =");
             def.push("__root =");
-            def.push("__sbrel =");
-            def.push("__stackless =");
-            def.push("__swi =");
             def.push("__task =");
-            def.push("__thumb =");
+            def.push("__tiny =");
             def.push("__weak =");
 
             defs = fs.readFileSync(tmpfile).toString();
@@ -154,7 +149,7 @@ class Iar {
         }
 
         //Check compile commands:
-        var icc_regex = new RegExp("^iccarm.exe (.*\\.c|.*\\.cpp) (.*)$", "gm");
+        var icc_regex = new RegExp("^iccstm8.exe (.*\\.c|.*\\.cpp) (.*)$", "gm");
         while (temp = icc_regex.exec(build_output)) {
             this.commands.push(temp);
         }
@@ -240,7 +235,7 @@ class Iar {
         
         var task = os.cpus().length;
 
-        var args = [iar.project.split("\\").join("\\\\"), '-make', iar.config ,'-log', 'all', '-parallel', task];
+        var args = [iar.project.split("\\").join("\\\\"), '-build', iar.config ,'-log', 'all', '-parallel', task];
         var out = ch.spawn(iar.path + "common\\bin\\IarBuild.exe", args, {
             stdio: ['ignore', 'pipe', 'ignore']
         });
@@ -249,15 +244,15 @@ class Iar {
         out.stdout.on('data', function (data) {
             var buffer = data;
             var temp;
-            var asm_regex = new RegExp("^iasmarm.exe (.*\\.s) (.*)$", "gmi");
+            var asm_regex = new RegExp("^iasmstm8.exe (.*\\.s) (.*)$", "gmi");
             while (temp = asm_regex.exec(buffer)) {
                 iar.terminal.appendLine(path.basename(temp[1]));
             }
-            var icc_regex = new RegExp("^iccarm.exe (.*\\.c|.*\\.cpp) (.*)$", "gmi");
+            var icc_regex = new RegExp("^iccstm8.exe (.*\\.c|.*\\.cpp) (.*)$", "gmi");
             while (temp = icc_regex.exec(buffer)) {
                 iar.terminal.appendLine(path.basename(temp[1]));
             }
-            var link_regex = new RegExp("^ilinkarm.exe.*\\.o.*$", "gmi");
+            var link_regex = new RegExp("^ilinkstm8.exe.*\\.o.*$", "gmi");
             if (temp = link_regex.exec(buffer)) {
                 iar.terminal.appendLine(' ');
                 iar.terminal.appendLine("Linking...");
@@ -285,7 +280,7 @@ class Iar {
                     iar.terminal.appendLine(' ');
 
                     iar.terminal.appendLine('Errors: ' + iar.errors);
-                    iar.terminal.appendLine('Warning: ' + iar.warnings);
+                    iar.terminal.appendLine('Warnings: ' + iar.warnings);
                 }
             }
             else

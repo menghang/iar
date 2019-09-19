@@ -1,6 +1,6 @@
 const vscode = require('vscode');
 const fs = require('fs');
-const Iar = require('./iar');
+const Iar = require('./iar4stm8');
 
 iar = undefined;
 folder = undefined;
@@ -17,7 +17,7 @@ function activate(context) {
         return;
 
     folder = vscode.workspace.rootPath;
-    config_file = folder + "\\.vscode\\iar.json";
+    config_file = folder + "\\.vscode\\iar4stm8.json";
 
     vscode.workspace.onDidSaveTextDocument((e) => 
     {
@@ -28,7 +28,7 @@ function activate(context) {
         }
     })
 
-    let disposable = vscode.commands.registerCommand('iar.build', function () {
+    let disposable = vscode.commands.registerCommand('iar4stm8.build', function () {
         if (fs.existsSync(config_file)) {
             var obj = JSON.parse(fs.readFileSync(config_file));
             if (obj["config"] && obj["path"] && obj["project"]) {
@@ -39,7 +39,7 @@ function activate(context) {
             }
         }
         else {
-            vscode.window.showInformationMessage("No IAR configuration file found");
+            vscode.window.showInformationMessage("No IAR4STM8 configuration file found");
         }
     });
 

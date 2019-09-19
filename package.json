@@ -1,10 +1,10 @@
 {
-	"name": "iar",
-	"displayName": "IAR Embedded Workbench",
+	"name": "iar4stm8",
+	"displayName": "IAR Embedded Workbench for STM8",
 	"icon": "icon.png",
-	"description": "Provide Intellisense and Build support for IAR Embedded Workbench IDE",
-	"version": "1.6.0",
-	"publisher": "politoleo",
+	"description": "Provide Intellisense and Build support for IAR Embedded Workbench IDE for STM8",
+	"version": "1.0.0",
+	"publisher": "menghang",
 	"engines": {
 		"vscode": "^1.18.0"
 	},
@@ -12,32 +12,32 @@
 		"Other"
 	],
 	"activationEvents": [
-		"onCommand:iar.build"
+		"onCommand:iar4stm8.build"
 	],
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/politoleo/iar.git"
+		"url": "https://github.com/menghang/iar.git"
 	},
 	"main": "./src/main",
 	"contributes": {
 		"commands": [
 			{
-				"command": "iar.build",
+				"command": "iar4stm8.build",
 				"title": "IAR: Build Project"
 			}
 		],
 		"keybindings": [
 			{
-				"command": "iar.build",
+				"command": "iar4stm8.build",
 				"key": "ctrl+shift+B",
-				"when": "!inDebugMode && config.iar.enabled"
+				"when": "!inDebugMode && config.iar4stm8.enabled"
 			}
 		],
 		"configuration": {
 			"type": "object",
 			"title": "IAR Configuration",
 			"properties": {
-				"iar.enabled": {
+				"iar4stm8.enabled": {
 					"type": "boolean",
 					"default": false,
 					"description": "Enable IAR extension."
@@ -56,8 +56,8 @@
 		"@types/mocha": "^2.2.42"
 	},
 	"__metadata": {
-		"id": "8e4967c3-c5a3-4f54-adf9-83f7daaff7db",
-		"publisherDisplayName": "Leonardo Polito",
-		"publisherId": "ae8a33b2-c6ae-4f52-9d5e-110b0065517e"
+		"id": "81ae7850-1461-4441-a695-9ec3836377a0",
+		"publisherDisplayName": "Leonardo Polito & Meng Hang",
+		"publisherId": "ad56d0ef-d10a-4402-b4c8-6cd3428f904c"
 	}
 }
